@@ -1,4 +1,4 @@
-Absolutely! Here's the formatted **README.md** content — ready for copy-paste into your project folder without needing a download:
+###To-do List App Project:
 
 ---
 
@@ -92,18 +92,7 @@ Then open in browser:
 [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ---
-
-## 📸 Screenshots (Optional)
-
-Add screenshots in a `/screenshots` folder to showcase:
-
-* Main task view
-* Add task form
-* Completed & deleted tasks
-
----
-
-## 📌 Notes
+## 📌 Features
 
 * This app is for educational/demo purposes only.
 * You can enhance it by adding:
@@ -123,7 +112,6 @@ Open issues or submit pull requests to improve this project.
 ---
 
 ## 📄 License
-
+```
 This project is open source and free for learning and personal use.
-
 ```
