@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📝 To-Do List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+
+<body>
+        <button class="toggle-dark" onclick="toggleDarkMode()">🌙</button>
+
+    <div class="container">
+        <h1>📝 To-Do List</h1>
+
+        <!-- Add Task Form -->
+        <form action="/add" method="POST" class="task-form">
+            <input type="text" name="task" placeholder="Enter a new task" required>
+            
+            <select name="category" required>
+                <option value="Work">Work</option>
+                <option value="Personal">Personal</option>
+                <option value="Other">Other</option>
+            </select>
+
+            <input type="date" name="due_date" placeholder="Due Date">
+
+            <select name="priority">
+                <option value="">Priority</option>
+                <option value="High">🔥 High</option>
+                <option value="Medium">⚠️ Medium</option>
+                <option value="Low">🧊 Low</option>
+            </select>
+
+            <button type="submit">➕ Add Task</button>
+        </form>
+
+        <!-- Filters -->
+        <form method="get" action="/" class="filter-form">
+            <label>Filter by Category:</label>
+            <select name="category">
+                <option value="All" {% if category == 'All' %}selected{% endif %}>All</option>
+                {% for cat in categories %}
+                    <option value="{{ cat }}" {% if category == cat %}selected{% endif %}>{{ cat }}</option>
+                {% endfor %}
+            </select>
+
+            <label>
+                <input type="checkbox" name="completed" value="true" {% if show_completed %}checked{% endif %}>
+                Show Completed
+            </label>
+
+            <button type="submit">Apply</button>
+        </form>
+
+        <!-- Tasks List -->
+        <ul class="task-list">
+            {% for task in tasks %}
+                <li class="{% if task[3] %}completed{% endif %}">
+                    <strong>{{ task[1] }}</strong>
+                    <span class="tag">📂 {{ task[2] }}</span>
+
+                    {% if task[4] %}
+                        <span class="due-date">📅 {{ task[4] }}</span>
+                    {% endif %}
+
+                    {% if task[5] %}
+                        <span class="priority">
+                            {% if task[5] == 'High' %}🔥{% elif task[5] == 'Medium' %}⚠️{% elif task[5] == 'Low' %}🧊{% endif %}
+                            {{ task[5] }}
+                        </span>
+                    {% endif %}
+
+                    {% if not task[3] %}
+                        <a class="btn-action" href="/complete/{{ task[0] }}" title="Mark as completed">✔️</a>
+                    {% else %}
+                        <a class="btn-action" href="/delete/{{ task[0] }}" title="Delete task">🗑️</a>
+                    {% endif %}
+                </li>
+            {% else %}
+                <li class="empty-msg">No tasks found.</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Clear Completed Tasks -->
+        <form action="{{ url_for('clear_history') }}" method="post" onsubmit="return confirm('Are you sure you want to delete all completed tasks?');">
+            <button type="submit" class="btn danger">🧹 Clear History</button>
+        </form>
+
+        <!-- Export -->
+        <div class="options">
+            <a href="/export" class="btn export">📁 Export JSON</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>Made by <a href="https://github.com/FatimaMaqsoodi" target="_blank">Fatima Maqsoodi</a></p>
+    </footer>
+<script>
+function toggleDarkMode() {
+    document.body.classList.toggle('dark');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+}
+window.onload = function () {
+    if (localStorage.getItem('darkMode') === 'true') {
+        document.body.classList.add('dark');
+    }
+}
+</script>
+
+</body>
+</html>
